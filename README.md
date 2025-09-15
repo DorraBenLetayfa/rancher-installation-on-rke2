@@ -12,7 +12,9 @@ DISK: 80GB
 
 4- test DNS resolution for 3 nodes
 
-5- config NGINX 
+5- deploy RKE2
 
-6- Install RANCHER 
+6- config NGINX 
+
+7- Install RANCHER 
 

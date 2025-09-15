@@ -1,0 +1,49 @@
+#on bastion 
+sudo zypper install bind
+sudo systemctl enable --now named
+
+
+vim /etc/named.conf
+(add)
+zone "example.com" IN {
+    type master;
+    file "/etc/named/zones/<db.example.com>";
+};
+
+sudo mkdir -p /etc/named/zones
+vim /etc/named/zones/db.example.com
+
+$TTL 86400
+@   IN  SOA ns1.example.com. admin.example.com. (
+        2025091501 ; Serial (YYYYMMDDnn format)
+        3600       ; Refresh (1 hour)
+        1800       ; Retry (30 minutes)
+        1209600    ; Expire (14 days)
+        86400 )    ; Minimum (1 day)
+
+; Nameserver
+@       IN  NS      ns1.example.com.
+
+; NS record for this DNS server
+ns1     IN  A       10.0.0.10   ; <-- Replace with your DNS server IP
+
+; A records for RKE2 nodes
+node1   IN  A       10.0.0.11
+node2   IN  A       10.0.0.12
+node3   IN  A       10.0.0.13
+
+; Rancher hostname -> load balancer IP (recommended for HA)
+rancher IN  A       10.0.0.100
+
+sudo chown named:named /etc/named/zones/db.example.com
+sudo chmod 640 /etc/named/zones/db.example.com
+
+#test
+sudo named-checkconf
+sudo named-checkzone example.com /etc/named/zones/db.example.com
+
+sudo systemctl restart named
+sudo systemctl status named
+
+#from RKE2 Node
+dig rancher.example.com @10.0.0.10

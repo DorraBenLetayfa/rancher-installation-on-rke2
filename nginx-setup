@@ -1,0 +1,58 @@
+#install NGINX v1.14/1.15 on bastion
+
+sudo zypper install curl ca-certificates gpg2
+sudo zypper addrepo --gpgcheck --type yum --refresh --check 'http://nginx.org/packages/sles/$releasever_major' nginx-stable
+curl -o /tmp/nginx_signing.key https://nginx.org/keys/nginx_signing.key
+gpg --with-fingerprint /tmp/nginx_signing.key
+sudo rpmkeys --import /tmp/nginx_signing.key
+sudo zypper install nginx
+sudo systemctl enable nginx
+sudo systemctl start nginx
+
+#use this config for NGINX load balancer
+##################################################################################################################################3
+worker_processes 4;
+worker_rlimit_nofile 40000;
+
+events {
+    worker_connections 8192;
+}
+
+stream {
+    upstream rancher_servers_http {
+        least_conn;
+        server <IP_NODE_1>:80 max_fails=3 fail_timeout=5s;
+        server <IP_NODE_2>:80 max_fails=3 fail_timeout=5s;
+        server <IP_NODE_3>:80 max_fails=3 fail_timeout=5s;
+    }
+    server {
+        listen 80;
+        proxy_pass rancher_servers_http;
+    }
+
+}
+
+http {
+
+    upstream rancher_servers_https {
+        least_conn;
+        server <IP_NODE_1>:443 max_fails=3 fail_timeout=5s;
+        server <IP_NODE_2>:443 max_fails=3 fail_timeout=5s;
+        server <IP_NODE_3>:443 max_fails=3 fail_timeout=5s;
+    }
+    server {
+        listen 443 ssl;
+        ssl_certificate /path/to/tls.crt;
+        ssl_certificate_key /path/to/key.key;
+        location / {
+            proxy_pass https://rancher_servers_https;
+            proxy_set_header Host <rancher UI URL>;
+            proxy_ssl_server_name on;
+            proxy_ssl_name <rancher UI URL>
+        }
+    }
+}
+##################################################################################################################################3
+
+nginx -s reload
+
