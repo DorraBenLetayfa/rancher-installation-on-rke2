@@ -1,4 +1,5 @@
 #on bastion 
+
 sudo zypper install bind
 sudo systemctl enable --now named
 
