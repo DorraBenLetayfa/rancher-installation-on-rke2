@@ -1,0 +1,22 @@
+sudo systemctl status firewalld
+
+#if firewall is not installed
+sudo zypper install firewalld
+sudo systemctl enable --now firewalld
+
+#config ports
+sudo firewall-cmd --zone=public --permanent --add-port=6443/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=9345/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=10250/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=2379/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=2380/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=2381/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=30000-32767/tcp
+
+
+#reload service
+sudo firewall-cmd --reload
+
+
+#test ports config
+sudo firewall-cmd --list-ports --zone=public
