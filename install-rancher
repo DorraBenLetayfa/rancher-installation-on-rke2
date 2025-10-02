@@ -1,0 +1,71 @@
+#on rke2-node1
+
+mkdir /etc/rancher/rke2/
+
+#Do Not copy paste, rather set appropriate value. This is just a sample.
+tls-san:
+  - rancher.dom.com
+  - rke2s1.dom.com
+  - rke2s2.dom.com
+  - rke2s3.dom.com
+
+curl -sfL https://get.rke2.io | sh -
+
+systemctl enable --now rke2-server
+
+journalctl -u rke2-server -f
+
+/var/lib/rancher/rke2/bin/kubectl get nodes \
+  --kubeconfig /etc/rancher/rke2/rke2.yaml 
+
+#export kubectl path 
+
+#get token from /var/lib/rancher/rke2/server/node-token
+
+#on remaining nodes
+
+mkdir /etc/rancher/rke2/
+
+create /etc/rancher/rke2/config.yaml
+
+#Do Not copy paste, rather set appropriate value. This is just a sample.
+server: https://rancher.dom.com:9345    
+token: ohmygoodnessthisisaverylongtokengeneratedautomatically
+tls-san:
+  - rancher.dom.com
+  - rke2s1.dom.com
+  - rke2s2.dom.com
+  - rke2s3.dom.com
+
+curl -sfL https://get.rke2.io | sh -
+
+systemctl enable --now rke2-server
+
+journalctl -u rke2-server -f
+
+#on node 1 or bastion 
+/var/lib/rancher/rke2/bin/kubectl get nodes \
+  --kubeconfig /etc/rancher/rke2/rke2.yaml
+
+#on node 1
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+
+kubectl create namespace cattle-system
+
+helm repo add jetstack https://charts.jetstack.io --force-update
+
+helm install cert-manager jetstack/cert-manager --version v1.16.2 \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true
+
+helm install rancher rancher-latest/rancher \
+  --namespace cattle-system \
+  --set hostname=rancher.dom.com \
+  --set bootstrapPassword=admin  
+
+kubectl -n cattle-system rollout status deploy/rancher
+
+kubectl -n cattle-system get deploy rancher
+
+

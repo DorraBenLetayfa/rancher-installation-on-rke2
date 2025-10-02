@@ -1,3 +1,5 @@
+#on each of the 3 nodes 
+
 sudo systemctl status firewalld
 
 #if firewall is not installed

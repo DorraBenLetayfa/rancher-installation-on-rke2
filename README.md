@@ -1,10 +1,10 @@
 # rancher-installation-on-rke2
 
-1- provision 3 machines for rke2
-OS: opensuse leap 15
-CPU: 4
-RAM: 16GB
-DISK: 80GB
+1- provision 3 machines for rke2              
+OS: opensuse leap 15            
+CPU: 4                     
+RAM: 16GB                            
+DISK: 80GB                      
 
 2- configure firewall on machines 
 
