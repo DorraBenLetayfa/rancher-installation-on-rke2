@@ -18,3 +18,10 @@ DISK: 80GB
 
 7- Install RANCHER 
 
+# troubleshooting 
+in case you face issues: 
+- get the rancher pods 
+- describe the not working pod
+- if health probe issue : change the deploy to port 443 and HTTPS for health probes 
+- restart the rke2-server service if needed 
+
