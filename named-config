@@ -54,3 +54,9 @@ sudo systemctl status named
 
 #from RKE2 Node
 dig rancher.example.com @10.0.0.10
+
+(add in /etc/resolv.conf file for each node)
+search smartek.ae
+nameserver IP-OF-DNS-SERVER  (should be the first nameserver used)
+
+test with ping
