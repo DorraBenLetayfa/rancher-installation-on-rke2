@@ -66,4 +66,10 @@ kubectl -n cattle-system rollout status deploy/rancher
 
 kubectl -n cattle-system get deploy rancher
 
+If you tried to install rke2 on nodes and didn't work, and you faced: keys and certs are newer than datastore and could cause a cluster outage.
+Remove the files from disk and restart to be recreated from datastore.
+Run: 
+sudo rm -rf /var/lib/rancher/rke2/server/tls
+sudo rm -rf /var/lib/rancher/rke2/server/cred
+sudo rm -rf /var/lib/rancher/rke2/server/token
 
