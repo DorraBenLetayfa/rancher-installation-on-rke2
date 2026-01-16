@@ -4,7 +4,6 @@ mkdir /etc/rancher/rke2/
 
 #Do Not copy paste, rather set appropriate value. This is just a sample.
 tls-san:
-  - rancher.dom.com
   - rke2s1.dom.com
   - rke2s2.dom.com
   - rke2s3.dom.com
@@ -32,7 +31,6 @@ create /etc/rancher/rke2/config.yaml
 server: https://rancher.dom.com:9345    
 token: ohmygoodnessthisisaverylongtokengeneratedautomatically
 tls-san:
-  - rancher.dom.com
   - rke2s1.dom.com
   - rke2s2.dom.com
   - rke2s3.dom.com
