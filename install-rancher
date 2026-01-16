@@ -41,7 +41,10 @@ systemctl enable --now rke2-server
 
 journalctl -u rke2-server -f
 
-#on node 1 or bastion 
+#on bastion 
+copy the rke2.yaml file from rke2-1 for example to bastion and change the server like that: 
+server: https://rke2-dbl-1.smartek.ae:6443
+
 /var/lib/rancher/rke2/bin/kubectl get nodes \
   --kubeconfig /etc/rancher/rke2/rke2.yaml
 
