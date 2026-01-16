@@ -9,6 +9,8 @@ tls-san:
   - rke2s3.dom.com
 
 curl -sfL https://get.rke2.io | sh -
+#curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION=v1.33.2+rke2r1 sh -
+
 
 systemctl enable --now rke2-server
 
