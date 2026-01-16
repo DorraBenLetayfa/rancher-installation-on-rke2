@@ -30,7 +30,7 @@ mkdir /etc/rancher/rke2/
 create /etc/rancher/rke2/config.yaml
 
 #Do Not copy paste, rather set appropriate value. This is just a sample.
-server: https://rancher.dom.com:9345    
+server: https://rke2s1.dom.com:9345    
 token: ohmygoodnessthisisaverylongtokengeneratedautomatically
 tls-san:
   - rke2s1.dom.com
