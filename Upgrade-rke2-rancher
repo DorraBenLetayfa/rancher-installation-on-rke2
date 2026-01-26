@@ -23,5 +23,14 @@ steps:
 3- done
 4- check with cat /etc/os-release
    If you see: TRANSACTIONAL_UPDATE=true, or MicroOS, or SLE Micro it means ❌ No zypper dup otherwise yes. 
+   kubectl cordon <node>
+   kubectl drain <node> --ignore-daemonsets --delete-local-data
+   upgrade the system: zypper distro-upgrade
+   reboot node
+   checke rke2 service up 
+   kubectl uncordon <node>
+5- update to latest version available on the channel. (you can specify the version as well) - run on all nodes one at a time
+   curl -sfL https://get.rke2.io | sh -
+6- done
 
 
