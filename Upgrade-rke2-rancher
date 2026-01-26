@@ -1,0 +1,27 @@
+1- check matrix for rancher and rke2 compatibility. https://www.suse.com/suse-rke2/support-matrix/all-supported-versions/ 
+2- (if needed) update rancher to latest version supported on the rke2 version that I have. https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/upgrades#prerequisites
+3- check Os version for your ke2 version https://www.suse.com/suse-rke2/support-matrix/all-supported-versions/
+4- upgrade Os versin for rke2 https://support.scc.suse.com/s/kb/RKE2-OS-Upgrade-Process?language=en_US
+      - The steps to upgrade or patch the operating system are as follows:
+      - During the OS upgrade, don't stop the rke2-server or rke2-agent services
+      - Drain worker nodes before upgrading them
+      - Wait for the pods to be drained and scheduled to other nodes before upgrading the drained worker
+      - Perform the upgrade in a rolling fashion:
+      - Start by upgrading a single controlplane/etcd node at a time
+      - Upgrade one or more workers at a time (depending upon the capacity within the cluster to reschedule workloads to other nodes)
+      - Reboot the node after the upgrade is completed
+      - Un-cordon the node
+5- upgrade rke2 version
+6- test if rancher works 
+
+
+steps: 
+1- done 
+2- helm repo update 
+   helm search repo rancher-stable/rancher -l 
+   helm upgrade rancher rancher-stable/rancher --namespace cattle-system --set hostname=bastion-dbl.smartek.ae --set bootstrapPassword=admin123 --version 2.12.3
+3- done
+4- check with cat /etc/os-release
+   If you see: TRANSACTIONAL_UPDATE=true, or MicroOS, or SLE Micro it means ❌ No zypper dup otherwise yes. 
+
+
