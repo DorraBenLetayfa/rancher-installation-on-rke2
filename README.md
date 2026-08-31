@@ -105,7 +105,7 @@ You should see:
 
 DATA CREATED ON CLUSTER A
 
-# 5- Configure recurring Longhorn backups on Cluster A and B 
+# 5- Configure recurring Longhorn backup job on Cluster A
 Create a Longhorn recurring backup job.
 
 For example:
@@ -117,7 +117,7 @@ Retain: 96
 ```
 You can configure this through the Longhorn UI or Kubernetes.
 
-Then associate the job with the application volume.
+Then associate the job with the application volume (important) == go to volume, then scroll down to jobs and create recurring job. 
 
 For example, verify:
 
@@ -131,7 +131,7 @@ kubectl get volume.longhorn.io \
 
 The volume should have the recurring backup association.
 
-# 6- create backup from volume and Verify the first backup on Cluster A use UI or : 
+# 6- Verify the first backup on Cluster A use UI or : 
 Don't proceed until you have a successful backup.
 
 Run:
@@ -155,7 +155,7 @@ and a valid backup URL such as:
 
 nfs://192.168.122.86:/home/nfsshare?backup=...&volume=...
 
-# 7- Configure the same application on Cluster B
+# 7- Configure the same application on Cluster B only deployment without PV and PVC
 
 The desired architecture is:
 ```
@@ -218,14 +218,6 @@ Ideally:
 
 detached | healthy | false
 
-or attached/healthy once you mount it.
-
-Then create the PV/PVC that points to:
-
-dr-test-data
-
-Do not accidentally point the PVC at the original Cluster A volume.
-
 # 10 - Perform Cluster A → Cluster B failover
 Before failover:
 
@@ -243,12 +235,11 @@ kubectl get backupvolume.longhorn.io \
 
 For a real disaster, you may not be able to perform the clean shutdown. That's where your RPO comes into play.
 
-On Cluster B:
+# 11- On Cluster B:
 
 Restore/create the DR volume from the latest available backup.
-Wait for:
-restoreRequired=false
-
+create reccuring backup job from the volume => go to volume => scroll down => create job. 
+Activate Volume 
 Attach/mount the volume through the B-side PV/PVC.
 Scale the application up:
 kubectl scale deployment dr-test \
@@ -275,13 +266,7 @@ Cluster A ─────────X
                            |
                            +-- restored Longhorn volume
 ```
-# 11- Write new data on Cluster B
-This step is essential.
-
-Don't just verify the old A data.
-
-Change the data:
-
+# 12- Write new data on Cluster B
 kubectl exec -n dr-test <pod> -- \
   sh -c 'echo "DATA CREATED ON CLUSTER B AFTER FAILOVER" >> /usr/share/nginx/html/data/test.txt'
 
@@ -295,7 +280,7 @@ You should now have:
 DATA CREATED ON CLUSTER A
 DATA CREATED ON CLUSTER B AFTER FAILOVER
 
-# 12- Let Cluster B create a new backup
+# 13- Let Cluster B create a new backup
 This is the critical step for failback.
 
 Cluster B must successfully back up the changed DR volume to the shared backup target.
@@ -363,8 +348,6 @@ Do not restore from the old backup.
 Force/check backup target synchronization according to your Longhorn configuration and verify the new backup is visible.
 
 # 15- Create a new failback volume on Cluster A -> create DR volume from new backup on cluster A 
-Do not reuse the old Cluster A volume blindly.
-
 Create a new volume, for example:
 
 dr-test-data-failback
@@ -383,15 +366,7 @@ Monitor:
 kubectl get volume.longhorn.io dr-test-data-failback \
   -n longhorn-system -w
 
-Wait until:
-
-restoreRequired=false
-
-and:
-
-robustness=healthy
-
-# 16- Point the Cluster A application at the failback volume
+# 16- Point the Cluster A application at the failback volume   // or remove old PVC and Pv from cluster A 
 Once the restored volume has been independently verified:
 ```
 Cluster A
@@ -410,7 +385,7 @@ pvc-c1997f6f-...
 
 from the old Cluster A volume.
 
-# 17- Start the application on Cluster A
+# 17- Start the application on Cluster A and activate volume on cluster A 
 Once the PVC is:
 
 Bound
