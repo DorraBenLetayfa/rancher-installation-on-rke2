@@ -1,7 +1,7 @@
-#1- NFS server is set up 
+# 1- NFS server is set up 
 Longhorn Volume DR: Cluster A ↔ Cluster B
 
-#2- Prepare the two RKE2 clusters
+# 2- Prepare the two RKE2 clusters
 Cluster A = primary/production.
 Cluster B = DR/secondary.
 Install the same Longhorn version on both clusters. 
@@ -17,7 +17,7 @@ Configure the backup target in Longhorn on both clusters.
 Confirm the target is healthy/available before proceeding.
 Longhorn recommends using a reliable external backup target; NFS is supported.
 
-#3- Create the application on Cluster A
+# 3- Create the application on Cluster A
 For example, deploy:
 
 dr-test
@@ -83,7 +83,7 @@ kubectl get pods,pvc -n dr-test
 Verify the Longhorn volume (Or from UI):
 kubectl get volumes.longhorn.io -n longhorn-system
 
-#4- Put identifiable data into the application
+# 4- Put identifiable data into the application
 Do not just rely on the application's existing data.
 
 Create a clearly identifiable marker:
@@ -105,7 +105,7 @@ You should see:
 
 DATA CREATED ON CLUSTER A
 
-#5- Configure recurring Longhorn backups on Cluster A and B 
+# 5- Configure recurring Longhorn backups on Cluster A and B 
 Create a Longhorn recurring backup job.
 
 For example:
@@ -131,7 +131,7 @@ kubectl get volume.longhorn.io \
 
 The volume should have the recurring backup association.
 
-#6- Verify the first backup on Cluster A
+# 6- Verify the first backup on Cluster A
 Don't proceed until you have a successful backup.
 
 Run:
@@ -155,7 +155,7 @@ and a valid backup URL such as:
 
 nfs://192.168.122.86:/home/nfsshare?backup=...&volume=...
 
-#7- Configure the same application on Cluster B
+# 7- Configure the same application on Cluster B
 
 The desired architecture is:
 
@@ -172,7 +172,7 @@ The desired architecture is:
           \                            /
            \------ backups -----------/
 
-#8- Create the DR volume on Cluster B
+# 8- Create the DR volume on Cluster B
 On Cluster B, create a Longhorn volume from the latest backup. from UI
 
 Conceptually:
@@ -207,7 +207,7 @@ restoreRequired=false and the volume is healthy.
 
 The backup restore mechanism reconstructs the Longhorn volume from the backup data. Longhorn backups are incremental and use change-block tracking. 
 
-#9- Verify the DR volume before failover
+# 9- Verify the DR volume before failover
 Check:
 
 kubectl get volume.longhorn.io dr-test-data \
@@ -226,7 +226,7 @@ dr-test-data
 
 Do not accidentally point the PVC at the original Cluster A volume.
 
-#10 - Perform Cluster A → Cluster B failover
+# 10 - Perform Cluster A → Cluster B failover
 Before failover:
 
 Stop writes on Cluster A.
@@ -275,7 +275,7 @@ Cluster A ─────────X
                            |
                            +-- restored Longhorn volume
 
-#11- Write new data on Cluster B
+# 11- Write new data on Cluster B
 This step is essential.
 
 Don't just verify the old A data.
@@ -295,7 +295,7 @@ You should now have:
 DATA CREATED ON CLUSTER A
 DATA CREATED ON CLUSTER B AFTER FAILOVER
 
-#12- Let Cluster B create a new backup
+# 12- Let Cluster B create a new backup
 This is the critical step for failback.
 
 Cluster B must successfully back up the changed DR volume to the shared backup target.
@@ -320,7 +320,7 @@ And: STATE=Completed
 
 Do not start failback until this is confirmed.
 
-#13- Stop writes on Cluster B
+# 13- Stop writes on Cluster B
 Before failback:
 
 kubectl scale deployment dr-test \
@@ -335,7 +335,7 @@ shows no application pod writing to the volume.
 
 Then confirm the final B backup completed.
 
-#14- On Cluster A, sync the backup target
+# 14- On Cluster A, sync the backup target
 Cluster A needs to discover the backup created by Cluster B.
 
 Check:
@@ -362,7 +362,7 @@ Do not restore from the old backup.
 
 Force/check backup target synchronization according to your Longhorn configuration and verify the new backup is visible.
 
-#15- Create a new failback volume on Cluster A -> create DR volume from new backup on cluster A 
+# 15- Create a new failback volume on Cluster A -> create DR volume from new backup on cluster A 
 Do not reuse the old Cluster A volume blindly.
 
 Create a new volume, for example:
@@ -391,7 +391,7 @@ and:
 
 robustness=healthy
 
-#17- Point the Cluster A application at the failback volume
+# 16- Point the Cluster A application at the failback volume
 Once the restored volume has been independently verified:
 
 Cluster A
@@ -410,7 +410,7 @@ pvc-c1997f6f-...
 
 from the old Cluster A volume.
 
-#18- Start the application on Cluster A
+# 17- Start the application on Cluster A
 Once the PVC is:
 
 Bound
@@ -466,7 +466,7 @@ failback volume
     ▼
 application
 
-#19- Final failback verification
+# 18- Final failback verification
 After the application is running on Cluster A:
 
 Read the data.
