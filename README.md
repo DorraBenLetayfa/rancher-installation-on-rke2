@@ -109,12 +109,12 @@ DATA CREATED ON CLUSTER A
 Create a Longhorn recurring backup job.
 
 For example:
-
+```
 Name: dr-backup
 Task: backup
 Schedule: */15 * * * *
 Retain: 96
-
+```
 You can configure this through the Longhorn UI or Kubernetes.
 
 Then associate the job with the application volume.
