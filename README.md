@@ -19,7 +19,7 @@ Longhorn recommends using a reliable external backup target; NFS is supported.
 
 # 3- Create the application on Cluster A
 For example, deploy:
-
+```
 dr-test
  ├── Deployment
  ├── Service
@@ -27,9 +27,9 @@ dr-test
        │
        ▼
    Longhorn Volume
-
+```
 Example:
-
+```
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -73,7 +73,7 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: test-data
-
+```
 Apply it on Cluster A:
 kubectl apply -f app.yaml
 
@@ -158,7 +158,7 @@ nfs://192.168.122.86:/home/nfsshare?backup=...&volume=...
 # 7- Configure the same application on Cluster B
 
 The desired architecture is:
-
+```
                  NFS Backup Target
                 /                 \
                /                   \
@@ -171,12 +171,12 @@ The desired architecture is:
       Longhorn                     Longhorn
           \                            /
            \------ backups -----------/
-
+```
 # 8- Create the DR volume on Cluster B
 On Cluster B, create a Longhorn volume from the latest backup. from UI
 
 Conceptually:
-
+```
 apiVersion: longhorn.io/v1beta2
 kind: Volume
 metadata:
@@ -189,7 +189,7 @@ spec:
   frontend: blockdev
   fromBackup: "nfs://192.168.122.86:/home/nfsshare?backup=<LATEST-BACKUP>&volume=<SOURCE-VOLUME>"
   Standby: true
-
+```
 Use the exact backup URL from the backup object.
 Don't manually guess the backup ID.
 Check:
@@ -263,7 +263,7 @@ kubectl exec -n dr-test <pod> -- \
   cat /usr/share/nginx/html/data/test.txt
 
 At this point:
-
+```
           FAILOVER
              ↓
 Cluster A ─────────X
@@ -274,7 +274,7 @@ Cluster A ─────────X
                            +-- application
                            |
                            +-- restored Longhorn volume
-
+```
 # 11- Write new data on Cluster B
 This step is essential.
 
@@ -345,7 +345,7 @@ kubectl get backupvolume.longhorn.io \
   -o custom-columns='NAME:.metadata.name,LASTBACKUP:.status.lastBackupName,LASTBACKUPAT:.status.lastBackupAt,LASTSYNC:.status.lastSyncedAt'
 
 The important point is:
-
+```
 Cluster B
     ↓
 backup-a35...
@@ -355,7 +355,7 @@ NFS
 Cluster A backup target
     ↓
 backup-a35...
-
+```
 If Cluster A does not see the new backup, stop here.
 
 Do not restore from the old backup.
@@ -393,7 +393,7 @@ robustness=healthy
 
 # 16- Point the Cluster A application at the failback volume
 Once the restored volume has been independently verified:
-
+```
 Cluster A
    |
    +-- Application
@@ -403,7 +403,7 @@ Cluster A
                 +-- PV
                       |
                       +-- dr-test-data-failback
-
+```
 The important thing is that the application's PVC must reference the restored failback PV, not:
 
 pvc-c1997f6f-...
@@ -440,7 +440,7 @@ DATA CREATED ON CLUSTER A
 DATA CREATED ON CLUSTER B AFTER FAILOVER
 
 That proves:
-
+```
                  FAILOVER
 
 Cluster A
@@ -465,7 +465,7 @@ failback volume
     │
     ▼
 application
-
+```
 # 18- Final failback verification
 After the application is running on Cluster A:
 
