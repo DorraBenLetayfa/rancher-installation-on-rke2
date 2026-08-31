@@ -191,7 +191,7 @@ restoreRequired=false and the volume is healthy.
 
 The backup restore mechanism reconstructs the Longhorn volume from the backup data. Longhorn backups are incremental and use change-block tracking. 
 
-# 9- Verify the DR volume before failover
+# 9- Verify the DR volume before failover + sync all backup volumes 
 Check:
 
 kubectl get volume.longhorn.io dr-test-data \
@@ -304,7 +304,7 @@ shows no application pod writing to the volume.
 
 Then confirm the final B backup completed.
 
-# 14- On Cluster A, sync the backup target
+# 14- On Cluster A, sync the backup target 
 Cluster A needs to discover the backup created by Cluster B.
 
 Check:
@@ -331,7 +331,7 @@ Do not restore from the old backup.
 
 Force/check backup target synchronization according to your Longhorn configuration and verify the new backup is visible.
 
-# 15- Create a new failback volume on Cluster A -> create DR volume from new backup on cluster A + attach reccuring job to the volume
+# 15- Create a new failback volume on Cluster A -> create DR volume from new backup on cluster A + attach reccuring job to the volume + sync all backup volumes 
 Create a new volume, for example:
 
 dr-test-data-failback
