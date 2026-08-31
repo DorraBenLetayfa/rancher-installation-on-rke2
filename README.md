@@ -13,6 +13,7 @@ Network connectivity to the backup target.
 Use the same backup target on both clusters, for example:
 nfs://192.168.122.86:/home/nfsshare
 
+
 Configure the backup target in Longhorn on both clusters.
 Confirm the target is healthy/available before proceeding.
 Longhorn recommends using a reliable external backup target; NFS is supported.
@@ -28,7 +29,7 @@ dr-test
        ▼
    Longhorn Volume
 ```
-Example:
+Example: (btw you need the deploy only)
 ```
 apiVersion: v1
 kind: Namespace
@@ -83,7 +84,16 @@ kubectl get pods,pvc -n dr-test
 Verify the Longhorn volume (Or from UI):
 kubectl get volumes.longhorn.io -n longhorn-system
 
-# 4- Put identifiable data into the application
+# 4- Create Recuuring Job + volume on longhorn cluster A + attach the job to the volume. 
+associate the job with the application volume (important) == go to volume, then scroll down to jobs and create recurring job. 
+For example:
+```
+Name: dr-backup
+Task: backup
+Schedule: */15 * * * *
+Retain: 96
+```
+# 5- Put identifiable data into the application
 Do not just rely on the application's existing data.
 
 Create a clearly identifiable marker:
@@ -104,32 +114,6 @@ kubectl exec -n dr-test deploy/dr-test -- \
 You should see:
 
 DATA CREATED ON CLUSTER A
-
-# 5- Configure recurring Longhorn backup job on Cluster A
-Create a Longhorn recurring backup job.
-
-For example:
-```
-Name: dr-backup
-Task: backup
-Schedule: */15 * * * *
-Retain: 96
-```
-You can configure this through the Longhorn UI or Kubernetes.
-
-Then associate the job with the application volume (important) == go to volume, then scroll down to jobs and create recurring job. 
-
-For example, verify:
-
-kubectl get recurringjob.longhorn.io \
-  -n longhorn-system
-
-And:
-
-kubectl get volume.longhorn.io \
-  -n longhorn-system
-
-The volume should have the recurring backup association.
 
 # 6- Verify the first backup on Cluster A use UI or : 
 Don't proceed until you have a successful backup.
@@ -172,7 +156,7 @@ The desired architecture is:
           \                            /
            \------ backups -----------/
 ```
-# 8- Create the DR volume on Cluster B
+# 8- wait till you see a backup on cluster B and Create the DR volume on Cluster B
 On Cluster B, create a Longhorn volume from the latest backup. from UI
 
 Conceptually:
@@ -222,7 +206,7 @@ detached | healthy | false
 Before failover:
 
 Stop writes on Cluster A.
-Ideally scale the application down:
+Ideally scale the application down: (do that after 1min at least : depending on the cron you configured in the reccuring job)
 kubectl scale deployment dr-test \
   -n dr-test \
   --replicas=0
@@ -305,7 +289,7 @@ And: STATE=Completed
 
 Do not start failback until this is confirmed.
 
-# 13- Stop writes on Cluster B
+# 13- Stop writes on Cluster B (do that after 1min at least : depending on the cron you configured in the reccuring job)
 Before failback:
 
 kubectl scale deployment dr-test \
