@@ -131,7 +131,7 @@ kubectl get volume.longhorn.io \
 
 The volume should have the recurring backup association.
 
-# 6- Verify the first backup on Cluster A
+# 6- create backup from volume and Verify the first backup on Cluster A use UI or : 
 Don't proceed until you have a successful backup.
 
 Run:
