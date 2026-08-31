@@ -238,7 +238,7 @@ For a real disaster, you may not be able to perform the clean shutdown. That's w
 # 11- On Cluster B:
 
 Restore/create the DR volume from the latest available backup.
-create reccuring backup job from the volume => go to volume => scroll down => create job. 
+create reccuring backup job from the volume => go to volume => scroll down => use exiting job /or create
 Activate Volume 
 Attach/mount the volume through the B-side PV/PVC.
 Scale the application up:
@@ -280,7 +280,7 @@ You should now have:
 DATA CREATED ON CLUSTER A
 DATA CREATED ON CLUSTER B AFTER FAILOVER
 
-# 13- Let Cluster B create a new backup
+# 13- let cluster B take a new backup
 This is the critical step for failback.
 
 Cluster B must successfully back up the changed DR volume to the shared backup target.
@@ -347,7 +347,7 @@ Do not restore from the old backup.
 
 Force/check backup target synchronization according to your Longhorn configuration and verify the new backup is visible.
 
-# 15- Create a new failback volume on Cluster A -> create DR volume from new backup on cluster A 
+# 15- Create a new failback volume on Cluster A -> create DR volume from new backup on cluster A + attach reccuring job to the volume
 Create a new volume, for example:
 
 dr-test-data-failback
@@ -366,7 +366,7 @@ Monitor:
 kubectl get volume.longhorn.io dr-test-data-failback \
   -n longhorn-system -w
 
-# 16- Point the Cluster A application at the failback volume   // or remove old PVC and Pv from cluster A 
+# 16- Point the Cluster A application at the failback volume - activate volume and create PVc/PV
 Once the restored volume has been independently verified:
 ```
 Cluster A
@@ -458,3 +458,5 @@ You should have:
 DATA CREATED ON CLUSTER A
 DATA CREATED ON CLUSTER B AFTER FAILOVER
 BACK ON CLUSTER A
+
+NOTE: before taking down the app you should wait for at least 1 minute for the backup to detect the changes you made. 
