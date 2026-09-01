@@ -84,3 +84,5 @@ You create a Backing Image only when you have a specific use case for starting v
 14- System backup = backup of longhorn itself
 
 15- Data is replicated across the different nodes of the Longhorn cluster = HA
+
+16- Rancher K8s Upgarde refers to upgrading the Kubernetes version of your downstream cluster managed by Rancher
