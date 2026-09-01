@@ -1,0 +1,86 @@
+1-Longhorn can be installed on Rancher as a Rancher application Or on a separate RKE2 cluster 
+
+2- Longhorn should be installed on the same rke2 cluster that runs the application pods
+
+3- Longhorn Provides distributed block storage for Kubernetes 
+====>  Distributed block storage refers to a storage architecture in which data is stored
+across multiple physical devices or nodes, and these devices work together to provide a unified and scalable
+storage system. (you can have multiple nodes in longhorn and data is spread across those nodes)
+
+4- Prepare Storage: Longhorn requires dedicated storage for its default volume data path, which is
+/var/lib/longhorn. Ensure you have a dedicated disk ready and mount it with the appropriate filesystem,
+typically ext4 or xfs, to store Longhorn's volume data.
+
+5- Have one or more additional dedicated disks that need to have a supported file system on them.
+
+6-  important feature available is the ability to allocate a minimum amount of CPU to the Instance
+manager. This allocation ensures that the Instance manager, responsible for controller and replica instance
+lifecycle management, has the necessary computational resources to operate efficiently. By setting a
+minimum CPU allocation, you can guarantee that Longhorn's core components receive the required
+processing power for optimal performance.
+
+7- V2 can be particularly attractive for:
+databases
+high-IOPS applications
+NVMe
+low-latency workloads
+large storage systems
+
+V1 is for general use. 
+
+8- Choose V1 if:
+You want the simplest deployment.
+Your applications have normal I/O requirements.
+You're running VMs/general applications/databases without extreme storage performance requirements.
+You want maximum maturity.
+You want fewer infrastructure prerequisites.
+You don't have NVMe-focused hardware.
+
+Consider V2 if:
+You're using modern NVMe storage.
+You need very high IOPS.
+Latency matters significantly.
+You have database workloads that can benefit from very fast storage.
+You're comfortable managing SPDK/hugepages/hardware prerequisites.
+You've tested the exact V2 feature set you need.
+
+9- The Engine Image is the software that actually runs the Longhorn storage engine for a volume.
+Think of it as the "storage engine binary/container". Longhorn needs an engine image installed/available on the nodes that will run the engine.
+
+                  Longhorn Volume
+                        │
+                        ▼
+                 Engine Image
+              ┌─────────────────┐
+              │ Longhorn Engine  │
+              │                  │
+              │ manages I/O      │
+              │ replication      │
+              │ snapshots        │
+              └────────┬────────┘
+                       │
+             ┌─────────┼─────────┐
+             ▼         ▼         ▼
+          Replica 1  Replica 2  Replica 3
+
+10- A backing image is essentially a read-only base image from which one or more Longhorn volumes can be created.
+                Backing Image
+                ┌────────────┐
+                │ Ubuntu     │
+                │ image      │
+                │ 10 GB      │
+                └─────┬──────┘
+                      │
+             ┌────────┼────────┐
+             ▼        ▼        ▼
+          Volume A  Volume B  Volume C
+11- You normally don't create an Engine Image yourself. Longhorn creates/manages it.
+You create a Backing Image only when you have a specific use case for starting volumes from pre-existing disk content.
+
+12- Image Engine indicates: Which version of the storage engine (V1 or V2) should this volume use.
+
+13- You create a backing image when you have some data that you want multiple Longhorn volumes to start from.
+
+14- System backup = backup of longhorn itself
+
+15- Data is replicated across the different nodes of the Longhorn cluster = HA
