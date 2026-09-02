@@ -179,3 +179,10 @@ Balance option to customize auto-balancing settings
 – To schedule Replica Auto Balance via a storage class, start by
 creating a new storage class with defined parameters, and
 create a PVC manifest file using this storage class
+
+29- Prometheus does not guess what it needs to monitor. 
+It absolutely requires a target defined by a ServiceMonitor (or PodMonitor) object to know where to collect (scrape) the metrics 
+and allow the execution of PromQL queries.
+
+when Service Monitor is created and configured to montiro the longhorn-manager pods, Prometheus immediately starts collecting Longhorn metrics, 
+and Longhorn-specific dashboards are automatically injected into Grafana on their own."
