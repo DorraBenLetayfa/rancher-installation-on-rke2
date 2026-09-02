@@ -87,4 +87,5 @@ You create a Backing Image only when you have a specific use case for starting v
 
 16- Rancher K8s Upgarde refers to upgrading the Kubernetes version of your downstream cluster managed by Rancher
 
-17- trim feature is to reclaim storage from volume.
+17- trim feature is to reclaim storage from volume. = also with recurring job you can automate the trim operation. you will need to reclaim free storage 
+when you delete some files or data and the volume size doesn't get reduced. 
