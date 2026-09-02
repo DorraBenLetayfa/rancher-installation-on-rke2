@@ -93,3 +93,7 @@ when you delete some files or data and the volume size doesn't get reduced.
 18- for volume resize feature you need to be using the longhorn storage class and allowVolumeExpansion set to true. size can be increased but never decreased. 
 
 19- data locality = Longhorn leverages the concept of scheduling pods on the same node where their associated Longhorn volumes are located.
+
+20- when using strict-local data locality mode in Longhorn, the number of replicas for a volume should be set to 1.
+strict-local setting enforces that Longhorn keeps exactly one single replica of the volume on the identical node 
+where the workload (pod) is actively running.
