@@ -194,3 +194,7 @@ and Longhorn-specific dashboards are automatically injected into Grafana on thei
 – This policy prompts Longhorn to force delete terminating pods of
 StatefulSet/Deployment on inactive nodes, releasing associated volumes for swift replacement by Kubernetes
 fter force deleting, Kubernetes will detach the Longhorn volume and spin up replacement pods on a new node.
+
+30- Recover from node failure mean : pod is created on node 3, volumes are on same node, node 3 goes down, Pod Deletion Policy When Node
+is Down is enabled so pods will get detached from volumes on that node, fter force deleting, Kubernetes will detach the Longhorn
+volume and spin up replacement pods on a new node.
