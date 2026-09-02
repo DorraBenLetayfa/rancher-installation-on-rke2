@@ -229,3 +229,5 @@ the next one, that cannot occur without a subsequent snapshot .
 deleted snapshot
 
 35-Allow Recurring Job While Volume is Detached:  if volume is detached I can't do a snapshot myself but this option automates taking a snapshot even when the volume is detached
+
+36- volume attached/detached means attached/detached to/from node. (not workload)
