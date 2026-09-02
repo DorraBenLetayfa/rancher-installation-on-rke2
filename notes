@@ -228,6 +228,7 @@ the next one, that cannot occur without a subsequent snapshot .
 ● The next entity in line is the live volume, actively in use and incompatible with the
 deleted snapshot
 
-35-Allow Recurring Job While Volume is Detached:  if volume is detached I can't do a snapshot myself but this option automates taking a snapshot even when the volume is detached
+35-Allow Recurring Job While Volume is Detached:  if volume is detached I can't do a snapshot myself but this option automates taking a snapshot
+even when the volume is detached. this is usefull if you want to restore the data from detached volume in another volume. 
 
 36- volume attached/detached means attached/detached to/from node. (not workload)
