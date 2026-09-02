@@ -212,3 +212,6 @@ Applies silences and inhibitions (rules to block certain alerts).
 Sends the final notification to your chosen destination, like Slack, PagerDuty, or email.
 
 32- Only data that overwrites information in older snapshots is included in a new snapshot.
+
+33- to restore a snapshot you need to scale down the pod first this will detach the volume, the select volume and attach it to any node and select maintenance
+and then revert the snapshot, then detach the volume again, and scale the pod to 1: it will be attached to the pod. 
