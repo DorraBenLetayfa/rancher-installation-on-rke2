@@ -215,3 +215,15 @@ Sends the final notification to your chosen destination, like Slack, PagerDuty, 
 
 33- to restore a snapshot you need to scale down the pod first this will detach the volume, the select volume and attach it to any node and select maintenance
 and then revert the snapshot, then detach the volume again, and scale the pod to 1: it will be attached to the pod. 
+
+34-Longhorn presents three distinct scenarios when deleting a
+snapshot:
+– Deleting a snapshot with zero bytes has no impact on other snapshots in the
+chain.
+– When deleting a snapshot containing data, Longhorn automatically executes a
+snapshot purge, merging the data into the next snapshot in line.
+– The latest snapshot in Longhorn cannot be deleted because of the snapshot
+purge process, which involves merging the content of a deleted snapshot with
+the next one, that cannot occur without a subsequent snapshot .
+● The next entity in line is the live volume, actively in use and incompatible with the
+deleted snapshot
