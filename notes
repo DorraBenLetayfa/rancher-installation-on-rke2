@@ -198,3 +198,15 @@ fter force deleting, Kubernetes will detach the Longhorn volume and spin up repl
 30- Recover from node failure mean : pod is created on node 3, volumes are on same node, node 3 goes down, Pod Deletion Policy When Node
 is Down is enabled so pods will get detached from volumes on that node, fter force deleting, Kubernetes will detach the Longhorn
 volume and spin up replacement pods on a new node.
+
+31- Prometheus is responsible for evaluating and firing the alert, while Alertmanager is responsible for receiving, grouping, and sending it.
+Prometheus:
+Evaluates your alert rules using data from your metrics.
+Detects when a condition becomes true (e.g., CPU usage is over 90%).
+Changes the alert state to firing.Sends the firing alert to Alertmanager over the network.
+
+Alertmanager:
+Receives the alert from Prometheus.
+Removes duplicates and groups similar alerts together.
+Applies silences and inhibitions (rules to block certain alerts).
+Sends the final notification to your chosen destination, like Slack, PagerDuty, or email.
