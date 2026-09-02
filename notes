@@ -91,3 +91,5 @@ You create a Backing Image only when you have a specific use case for starting v
 when you delete some files or data and the volume size doesn't get reduced. 
 
 18- for volume resize feature you need to be using the longhorn storage class and allowVolumeExpansion set to true. size can be increased but never decreased. 
+
+19- data locality = Longhorn leverages the concept of scheduling pods on the same node where their associated Longhorn volumes are located.
