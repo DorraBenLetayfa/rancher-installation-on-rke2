@@ -86,3 +86,5 @@ You create a Backing Image only when you have a specific use case for starting v
 15- Data is replicated across the different nodes of the Longhorn cluster = HA
 
 16- Rancher K8s Upgarde refers to upgrading the Kubernetes version of your downstream cluster managed by Rancher
+
+17- trim feature is to reclaim storage from volume.
