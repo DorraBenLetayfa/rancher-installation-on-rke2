@@ -210,3 +210,5 @@ Receives the alert from Prometheus.
 Removes duplicates and groups similar alerts together.
 Applies silences and inhibitions (rules to block certain alerts).
 Sends the final notification to your chosen destination, like Slack, PagerDuty, or email.
+
+32- Only data that overwrites information in older snapshots is included in a new snapshot.
