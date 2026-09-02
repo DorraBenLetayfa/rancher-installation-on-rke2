@@ -186,3 +186,11 @@ and allow the execution of PromQL queries.
 
 when Service Monitor is created and configured to montiro the longhorn-manager pods, Prometheus immediately starts collecting Longhorn metrics, 
 and Longhorn-specific dashboards are automatically injected into Grafana on their own."
+
+29- Within General Settings, configure the Pod Deletion Policy When Node is Down
+
+– Set it to delete-both-statefulset-and-deployment-pod
+
+– This policy prompts Longhorn to force delete terminating pods of
+StatefulSet/Deployment on inactive nodes, releasing associated volumes for swift replacement by Kubernetes
+fter force deleting, Kubernetes will detach the Longhorn volume and spin up replacement pods on a new node.
