@@ -157,3 +157,14 @@ four off-balanced replicas will only rebalance one replica.
 Best-Effort: Selecting this mode instructs Longhorn to make the best effort to balance replicas evenly for
 optimal redundancy. For example, on your node-1 there are 4 off-balanced replicas after adding a new node
 node-2, a volume with four off-balanced replicas will have two replicas rebalanced.
+
+27- recplica auto balance in longhorn vs replica node level soft anti-affinity disbaled
+Longhorn Replica Auto Balance automatically moves or rebalances replicas when cluster topology changes, 
+whereas disabling Replica Node Level Soft Anti-Affinity strictly prevents placing multiple replicas of the same volume onto the same node.
+
+Replica Auto BalancePurpose: Moves or recreates replicas to achieve an even distribution across available nodes and zones when a new node joins or volume replica counts change.
+Action: Actively evaluates cluster capacity and placement optimization (using modes like least_effort or zone/disk pressure rules).
+
+Replica Node Level Soft Anti-Affinity (Disabled)
+Purpose: Controls whether multiple replicas for the same volume are allowed to reside on the same physical node.
+Action: When disabled (hard anti-affinity enforced), Longhorn blocks any node that already holds a healthy replica from receiving another replica for that same volume.
