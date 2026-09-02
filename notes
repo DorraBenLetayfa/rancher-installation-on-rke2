@@ -141,3 +141,19 @@ Performance: If Node A has no replica, every single read and write operation fro
 If Node A fails: The Pod moves to another node, but its storage performance remains dictated by random network placement.
 
 25- you can specify the data locality in a strogeclass that ou create manually and use it for PVC/PV creation.
+
+26- Replica Auto-Balance in Longhorn helps maintain data redundancy and load distribution in the cluster by
+automatically redistributing volume replicas as needed when a new node added in the cluster. This ensures
+that the storage infrastructure remains efficient, resilient, and well-balanced, making it a valuable feature for
+managing data in a distributed storage environment.
+Longhorn offers three choices for the global replica auto-balance setting:
+
+Disabled (Default): In this mode, no automatic replica auto-balancing occurs.
+
+Least-Effort: This option prompts Longhorn to balance replicas with minimal redundancy adjustments. For
+instance, on your node-1 there are 4 off-balanced replicas when a new node node-2 is added, a volume with
+four off-balanced replicas will only rebalance one replica.
+
+Best-Effort: Selecting this mode instructs Longhorn to make the best effort to balance replicas evenly for
+optimal redundancy. For example, on your node-1 there are 4 off-balanced replicas after adding a new node
+node-2, a volume with four off-balanced replicas will have two replicas rebalanced.
