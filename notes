@@ -139,3 +139,5 @@ Placement: The 2 replicas are placed randomly across the 3 nodes (e.g., Node B a
 Node A might get no replica at all.
 Performance: If Node A has no replica, every single read and write operation from your Pod must travel over the cluster network to Node B or C.
 If Node A fails: The Pod moves to another node, but its storage performance remains dictated by random network placement.
+
+25- you can specify the data locality in a strogeclass that ou create manually and use it for PVC/PV creation.
