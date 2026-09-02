@@ -168,3 +168,14 @@ Action: Actively evaluates cluster capacity and placement optimization (using mo
 Replica Node Level Soft Anti-Affinity (Disabled)
 Purpose: Controls whether multiple replicas for the same volume are allowed to reside on the same physical node.
 Action: When disabled (hard anti-affinity enforced), Longhorn blocks any node that already holds a healthy replica from receiving another replica for that same volume.
+
+28- Replica Auto Balance can be applied at following places:
+– Setting up global replica auto-balance by selecting the preferred
+option in General settings, once saved it applies to new volumes
+without affecting existing ones
+– Configure Replica Auto Balance for an existing volume, by
+selecting the specific volume, and use Update Replicas Auto
+Balance option to customize auto-balancing settings
+– To schedule Replica Auto Balance via a storage class, start by
+creating a new storage class with defined parameters, and
+create a PVC manifest file using this storage class
