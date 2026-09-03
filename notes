@@ -232,3 +232,7 @@ deleted snapshot
 even when the volume is detached. this is usefull if you want to restore the data from detached volume in another volume. 
 
 36- volume attached/detached means attached/detached to/from node. (not workload)
+
+37- Object Storage: Explicitly breaks up the file at the software layer and assigns pieces to specific disks alongside massive metadata.
+Block Storage: Choops data into anonymous raw blocks. A single hard drive might keep them together, 
+but modern enterprise/cloud block storage always scatters blocks across multiple disks to maximize performance
