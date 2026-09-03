@@ -246,3 +246,6 @@ checks its hardware map to see exactly where those numbers live physically (e.g.
 Block 900 is on Disk 3). It pulls them from the physical disks simultaneously.
 The Assembly: The blocks are delivered back to the File System in raw, binary form.
 The File System presents them back to your computer as a single, seamless file.
+
+39- It is recommended to schedule recurring backups for volumes to ensure a consistent data protection strategy.
+In the absence of a backupstore, recurring snapshots serve as a viable alternative
