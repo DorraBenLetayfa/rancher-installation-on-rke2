@@ -1,1 +1,37 @@
+1- Observability is MELT (Metrics,Events,Logs,Traces) tool.
 
+2- Observability provide dynamic visualization of system relationships : provides real time mapping of how services and infra components interact
+within an IT env. 
+
+3- Observability Agent runs as Daemonset in k8s monitored cluster ensuring complete cluster monitoring. 
+
+4- Observability integrates natively with OpenTelemetry and ElasticSearch, and allows integartion with custom sources using configurable APIs.
+
+5- Observability uses PVC on k8s to store the state of monitored components. 
+
+6- Requirements:
+   supported OS: SLES,Ubuntu and RHEL (use TLS version)
+   linux kernel version 4.4+
+   Helm 3.0+
+   kubectl on nodes 
+   containerd(prefered)/docker/cri-o
+   curl
+   jq 
+   openSSL
+   for architecture choose a profile from here: https://documentation.suse.com/cloudnative/suse-observability/latest/en/setup/install-stackstate/requirements.html#_resource_requirements
+   for me now: I will used 3 nodes 8vCPU, 16GB each. (150-HA profile)
+   use TLS for secure access to Observability
+   DNS configured
+   apply network policies if needed  to control inter-components communication
+   for production SSD is recommended
+   get license key
+
+7- set a storage class frr Observability on RKE2. 
+
+8- For prod env HA deployment are recommended as switching from non-HA to HA later isn't supported. 
+
+9- store the baseConfig_values.yaml file and sizing_values.yaml file safely as they contain admin passwords and can be usable during upgrades.
+
+10- you can install from helm or using Rancher UI. 
+
+11- 
