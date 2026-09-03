@@ -236,3 +236,13 @@ even when the volume is detached. this is usefull if you want to restore the dat
 37- Object Storage: Explicitly breaks up the file at the software layer and assigns pieces to specific disks alongside massive metadata.
 Block Storage: Choops data into anonymous raw blocks. A single hard drive might keep them together, 
 but modern enterprise/cloud block storage always scatters blocks across multiple disks to maximize performance
+
+38- The Step-by-Step Retrieval ProcessWhen you click "Open Video.mp4", this exact sequence happens in milliseconds:
+The Request: Your application asks the File System for Video.mp4.
+The Lookup: The File System looks at its structural index table. 
+It sees that Video.mp4 is mapped to an exact list of anonymous, raw block numbers: [Block 102, Block 508, Block 900].
+The Fetch: The File System tells the Storage Controller: "Give me Blocks 102, 508, and 900."The Gathering: The Storage Controller
+checks its hardware map to see exactly where those numbers live physically (e.g., Block 102 is on Disk 1, Block 508 is on Disk 2, 
+Block 900 is on Disk 3). It pulls them from the physical disks simultaneously.
+The Assembly: The blocks are delivered back to the File System in raw, binary form.
+The File System presents them back to your computer as a single, seamless file.
