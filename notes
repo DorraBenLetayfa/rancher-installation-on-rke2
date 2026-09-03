@@ -252,3 +252,49 @@ In the absence of a backupstore, recurring snapshots serve as a viable alternati
 a backup in Longhorn strictly requires a BackupStore. You cannot create a Longhorn backup without configuring one.
 A snapshot does not require a BackupStore.A snapshot is completely self-contained. It is created and stored locally on the exact 
 same nodes and disks that are already running your live Longhorn volumes.
+
+40- Longhorn allows the activation of a DR volume when the associated volume is deemed healthy. This implies
+that all replicas within the volume are in optimal working condition.
+If you Enable Allow Volume Creation with Degraded Availability from global setting, the volume can also be activated 
+when it is in a degraded state. (for DR volumes) = it means I need to have same number of nodes betweens the clusters, 
+if I don't then I need to enable this option.
+
+41- upgrade Longhorn manager: 
+    - Ensure the backup of all your volumes by confirming the presence of recurring backup jobs
+    - If not already set up, create recurring backup jobs, and include a default group to automatically select and 
+      initiate backup jobs for volumes not assigned to any specific group
+    - For Longhorn setups initiated through a Helm Chart or configured as a Rancher application, it's imperative to
+      confirm if any alterations were made to the default StorageClass settings. 
+      Modifying these parameters might pose challenges during chart upgrades.
+      If adjustments to StorageClass parameters are needed, consider recreating the initial configuration to
+      establish a new StorageClass, ensuring a seamless upgrade process.
+    -  If Longhorn is installed as a Rancher App,utilize Rancher's application management; 
+       if installed via Helm, stick to Helm exclusively. 
+
+42- Upgrade Longhorn Engine Manually : 
+Create backups for all volumes in the cluster. This critical step ensures data safety and serves as a
+precautionary measure in case of unforeseen issues during the upgrade.
+
+Upgrade the Longhorn Manager before initiating the Longhorn engine upgrade. This sequential approach
+contributes to a well-structured and efficient upgrade process.
+
+Upgrading the Longhorn Engine offers two methods: Offline and Online upgrades.
+The distinction lies in the process. In the offline method, you must first remove all workloads attached to the
+volume, ensuring the volume is in a detached state before proceeding with the upgrade.
+
+In contrast, the online upgrade allows you to upgrade the Longhorn Engine without the need to remove
+workloads. This online upgrade capability is available starting from Longhorn version 1.4.x.
+
+when upgrade is done remove the old engine image. 
+
+43- when longhorn manager is upgraded a new longhorn engine image will be available and will be used by new volumes only. You might want to use the 
+new engine image for the existing volumes, so you need to scale their deployments down and recreate the volumes, it will use the upgraded engine image 
+for the volumes and then scale up back and remove the old engine image == that's the offline method
+
+online method == choose the volume and then choose upgrade engine and remove the old image. 
+
+44- Upgrade Longhorn Engine Automatically : 
+Tune Concurrent Automatic Engine Upgrade in settings for simultaneous upgrades after Longhorn manager update
+Set the value to 3 for a balanced approach, avoiding resource strain during upgrades. 
+concurrent Automatic Engine Upgrade Per Node Limit = The number of engines that can upgrade simultaneously
+remove the old engine image from longhorn manually. 
