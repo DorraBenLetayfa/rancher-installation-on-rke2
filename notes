@@ -248,4 +248,7 @@ The Assembly: The blocks are delivered back to the File System in raw, binary fo
 The File System presents them back to your computer as a single, seamless file.
 
 39- It is recommended to schedule recurring backups for volumes to ensure a consistent data protection strategy.
-In the absence of a backupstore, recurring snapshots serve as a viable alternative
+In the absence of a backupstore, recurring snapshots serve as a viable alternative.
+a backup in Longhorn strictly requires a BackupStore. You cannot create a Longhorn backup without configuring one.
+A snapshot does not require a BackupStore.A snapshot is completely self-contained. It is created and stored locally on the exact 
+same nodes and disks that are already running your live Longhorn volumes.
