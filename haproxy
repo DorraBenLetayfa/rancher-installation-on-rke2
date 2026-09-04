@@ -1,0 +1,136 @@
+cat /etc/haproxy/haproxy.cfg
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    daemon
+
+defaults
+    log global
+    timeout connect 30s
+    timeout client 1800s
+    timeout server 1800s
+
+
+# ==========================================================
+# RKE2 Kubernetes API
+# VIP: 192.168.122.86
+# Port: 6443
+# TCP passthrough
+# ==========================================================
+
+frontend rke2-api
+    bind 192.168.122.86:6443
+    mode tcp
+    option tcplog
+
+    default_backend rke2-api-backend
+
+backend rke2-api-backend
+    mode tcp
+    balance roundrobin
+    option tcp-check
+
+    server rke2-1-dbl.example.com 192.168.122.132:6443 check
+#    server rke2-2-dbl.example.com 192.168.122.170:6443 check
+#    server rke2-3-dbl.example.com 192.168.122.69:6443 check
+
+
+# ==========================================================
+# RKE2 Registration
+# VIP: 192.168.122.86
+# Port: 9345
+# TCP passthrough
+# ==========================================================
+
+frontend rke2-registration
+    bind 192.168.122.86:9345
+    mode tcp
+    option tcplog
+
+    default_backend rke2-registration-backend
+
+backend rke2-registration-backend
+    mode tcp
+    balance roundrobin
+    option tcp-check
+
+    server rke2-1-dbl.example.com 192.168.122.132:9345 check
+ #   server rke2-2-dbl.example.com 192.168.122.170:9345 check
+ #   server rke2-3-dbl.example.com 192.168.122.69:9345 check
+
+# ==========================================================
+# Rancher
+# VIP: 192.168.122.86
+# Port: 443
+# ==========================================================
+
+# ==========================================================
+# HTTPS applications
+# VIP: 192.168.122.86
+# Port: 443
+# TLS termination at HAProxy
+# ==========================================================
+
+frontend https-apps
+    bind 192.168.122.86:443 ssl crt /etc/haproxy/certs/rancher.pem crt /etc/haproxy/certs/observability.pem
+    mode http
+    option httplog
+
+    # Forward client/proxy information
+    http-request set-header X-Forwarded-Proto https
+    http-request set-header X-Forwarded-Port 443
+    http-request set-header X-Forwarded-For %[src]
+
+    # ------------------------------------------------------
+    # Rancher
+    # ------------------------------------------------------
+    acl host_rancher hdr(host) -i bastion.example.com
+
+    # ------------------------------------------------------
+    # SUSE Observability
+    # ------------------------------------------------------
+    acl host_observability hdr(host) -i observability.example.com
+
+   # Reject unknown HTTPS hosts
+    http-request deny if !host_rancher !host_observability
+
+    use_backend rancher-backend if host_rancher
+    use_backend observability-backend if host_observability
+
+backend rancher-backend
+    mode http
+    balance roundrobin
+
+    option httpchk
+
+    http-check connect
+    #http-check send meth GET uri /healthz ver HTTP/1.1 hdr Host bastion.example.com
+    http-check send meth GET uri /healthz ver HTTP/1.1 hdr Host bastion.example.com hdr X-Forwarded-Proto https hdr X-Forwarded-Port 443
+    http-check expect status 200
+
+    server rke2-1-dbl.example.com 192.168.122.132:80 check
+  #  server rke2-2-dbl.example.com 192.168.122.170:80 check
+  #  server rke2-3-dbl.example.com 192.168.122.69:80 check
+
+# ==========================================================
+# SUSE Observability
+# ==========================================================
+
+backend observability-backend
+    mode http
+    balance roundrobin
+
+    option httpchk
+
+    http-request set-header Host observability.example.com
+
+    http-check connect
+    http-check send meth GET uri / ver HTTP/1.1 hdr Host observability.example.com
+    http-check expect status 200
+
+    server rke2-dbl-obs1 192.168.122.54:80 check
+    server rke2-dbl-obs2 192.168.122.253:80 check
+    server rke2-dbl-obs3 192.168.122.171:80 check
+
+sudo haproxy -c -f /etc/haproxy/haproxy.cfg
+sudo systemctl reload haproxy
