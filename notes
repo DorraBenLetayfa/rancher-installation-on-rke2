@@ -32,6 +32,6 @@ within an IT env.
 
 9- store the baseConfig_values.yaml file and sizing_values.yaml file safely as they contain admin passwords and can be usable during upgrades.
 
-10- you can install from helm or using Rancher UI. 
+10- you can install from helm. 
 
 11- 
