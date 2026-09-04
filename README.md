@@ -20,6 +20,12 @@ each node has all the roles, 8vCPU, 16GB each. (150-HA profile)
   helm repo add suse-observability https://charts.rancher.com/server-charts/prime/suse-observability
   helm repo update
   vim values.yaml (get content from docs)
+  helm upgrade --install \
+    --namespace suse-observability \
+    --create-namespace \
+    --values values.yaml \
+    suse-observability \
+    suse-observability/suse-observability
   
   
 
