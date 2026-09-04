@@ -1,0 +1,12 @@
+root@bastion:~# cat /etc/hosts
+# Loopback entries; do not change.
+# For historical reasons, localhost precedes localhost.localdomain:
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.122.132 rke2-1-dbl.example.com rke2-1-dbl
+192.168.122.148 rke2-dbl-pr.example.com rke2-dbl-pr
+192.168.122.93 rke2-dbl-sec.example.com rke2-dbl-sec
+
+192.168.122.54 rke2-dbl-obs1.example.com rke2-dbl-obs1
+192.168.122.253 rke2-dbl-obs2.example.com rke2-dbl-obs2
+192.168.122.171 rke2-dbl-obs3.example.com rke2-dbl-obs3
