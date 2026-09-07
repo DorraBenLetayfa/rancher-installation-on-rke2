@@ -42,16 +42,6 @@ within an IT env.
 
 14- check used RAM and CPU: kubectl top nodes --no-headers | awk '{cpu+=$2; mem+=$4} END {gsub(/m/,"",cpu); gsub(/Mi/,"",mem); printf "Used: %.2f CPU cores | %.2f GiB RAM\n",cpu/1000,mem/1024}'
 
-15- after deployment create an ingress 
-ingress:
-  enabled: true
-  ingressClassName: traefik
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
-  hosts:
-    - host: suse-observability.MY_DOMAIN
-
-helm upgrade --namespace suse-observability --reuse-values --values ingress_values.yaml suse-observability suse-observability/suse-observability
-and access the URL.
+15- 
 
 16- 
