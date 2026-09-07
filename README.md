@@ -1,4 +1,4 @@
-#1-Provide an RKE2 cluster with 3 nodes:
+# 1-Provide an RKE2 cluster with 3 nodes:
 each node has all the roles, 8vCPU, 16GB each. (150-HA profile)
    linux kernel version 4.4+
    Helm 3.0+
@@ -12,12 +12,12 @@ each node has all the roles, 8vCPU, 16GB each. (150-HA profile)
    export PATH=$PATH:/var/lib/rancher/rke2/bin
    kubectl get pods -A
    
-  #2-get license key : C51FR-AVWZH-A31RA for INTERNAL-USE-ONLY-ff33-d2b8
+  # 2-get license key : C51FR-AVWZH-A31RA for INTERNAL-USE-ONLY-ff33-d2b8
   
 
-  #3- install longhorn 
+  # 3- install longhorn 
 
-  #4- Install Observability
+  # 4- Install Observability
   helm repo add suse-observability https://charts.rancher.com/server-charts/prime/suse-observability
   helm repo update
   vim values.yaml (get content from docs)
@@ -28,7 +28,7 @@ each node has all the roles, 8vCPU, 16GB each. (150-HA profile)
     suse-observability \
     suse-observability/suse-observability
   
-#5- after deployment create an ingress 
+# 5- after deployment create an ingress 
 ingress:
   enabled: true
   ingressClassName: traefik
@@ -40,6 +40,40 @@ ingress:
 helm upgrade --namespace suse-observability --reuse-values --values ingress_values.yaml suse-observability suse-observability/suse-observability
 and access the URL.
 
+# 6-Install agent on managed cluster
+
+Configure TLS for agent:
+cat agent-tls-values.yaml
+global:
+  customCertificates:
+    enabled: true
+    configMapName: observability-ca
+
+  skipSslValidation: false
+
+stackstate:
+  url: https://observability.example.com/receiver/stsAgent
+
+checksAgent:
+  skipSslValidation: false
+
+clusterAgent:
+  skipSslValidation: false
+
+nodeAgent:
+  skipSslValidation: false
+
+logsAgent:
+  skipSslValidation: false
+
+
+helm upgrade suse-observability-agent \
+  suse-observability/suse-observability-agent \
+  -n suse-observability-agent \
+  --reuse-values \
+  --values agent-tls-values.yaml
+
+  follow steps on Observability UI to install agent. 
 
 remove rancher-agent:
 sudo systemctl disable --now rancher-system-agent
