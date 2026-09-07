@@ -28,7 +28,17 @@ each node has all the roles, 8vCPU, 16GB each. (150-HA profile)
     suse-observability \
     suse-observability/suse-observability
   
-  
+#5- after deployment create an ingress 
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+  hosts:
+    - host: suse-observability.MY_DOMAIN
+
+helm upgrade --namespace suse-observability --reuse-values --values ingress_values.yaml suse-observability suse-observability/suse-observability
+and access the URL.
 
 
 remove rancher-agent:
