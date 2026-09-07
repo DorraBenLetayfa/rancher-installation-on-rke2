@@ -19,7 +19,7 @@ within an IT env.
    jq 
    openSSL
    for architecture choose a profile from here: https://documentation.suse.com/cloudnative/suse-observability/latest/en/setup/install-stackstate/requirements.html#_resource_requirements
-   for me now: I will used 3 nodes 8vCPU, 16GB each. (150-HA profile)
+   for me now: I will used 1 node 12vCPU, 32GB each. (trial profile)
    use TLS for secure access to Observability
    DNS configured
    apply network policies if needed  to control inter-components communication
@@ -35,3 +35,23 @@ within an IT env.
 10- Observability can be installed from helm. 
 
 11- the Agent can be installed from helm or UI. 
+
+12- before upgrading observability you need to take a backup, suse team provid ebackup scripts in git repo for that.
+
+13- metrics tell you when something is wrong, traces tell you where it happened, and logs tell you what caused it.
+
+14- check used RAM and CPU: kubectl top nodes --no-headers | awk '{cpu+=$2; mem+=$4} END {gsub(/m/,"",cpu); gsub(/Mi/,"",mem); printf "Used: %.2f CPU cores | %.2f GiB RAM\n",cpu/1000,mem/1024}'
+
+15- after deployment create an ingress 
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+  hosts:
+    - host: suse-observability.MY_DOMAIN
+
+helm upgrade --namespace suse-observability --reuse-values --values ingress_values.yaml suse-observability suse-observability/suse-observability
+and access the URL.
+
+16- 
