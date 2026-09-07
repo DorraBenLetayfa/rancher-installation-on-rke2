@@ -12,7 +12,8 @@ each node has all the roles, 8vCPU, 16GB each. (150-HA profile)
    export PATH=$PATH:/var/lib/rancher/rke2/bin
    kubectl get pods -A
    
-  #2-get license key : INTERNAL-USE-ONLY-1602-fa7f
+  #2-get license key : C51FR-AVWZH-A31RA for INTERNAL-USE-ONLY-ff33-d2b8
+  
 
   #3- install longhorn 
 
