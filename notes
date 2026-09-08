@@ -26,7 +26,7 @@ within an IT env.
    for production SSD is recommended
    get license key
 
-7- set a storage class frr Observability on RKE2. 
+7- set a storage class for Observability on RKE2. 
 
 8- For prod env HA deployment are recommended as switching from non-HA to HA later isn't supported. 
 
@@ -42,6 +42,23 @@ within an IT env.
 
 14- check used RAM and CPU: kubectl top nodes --no-headers | awk '{cpu+=$2; mem+=$4} END {gsub(/m/,"",cpu); gsub(/Mi/,"",mem); printf "Used: %.2f CPU cores | %.2f GiB RAM\n",cpu/1000,mem/1024}'
 
-15- 
+15- you can save a view for later use if needed. 
 
-16- 
+16- In SUSE Observability, a monitor is an automated background rule used to dynamically evaluate system health and generate alerts
+
+17- OpenTelemetry (OTel) is like a universal language for application data. It gathers performance data (clues) from your code and ships it out.SUSE Observability is the detective.
+It takes that data, combines it with a live map of your infrastructure, and tells you exactly where a problem is.
+
+18- Imagine your application is a delivery truck system:
+OpenTelemetry is the GPS tracker installed inside the truck. 
+It logs every turn, traffic delay, and engine error.SUSE Observability is the central command center.
+It takes that GPS data and lays it over a 3D map of the city. 
+If a truck slows down, it immediately shows you that the bridge it is driving over is undergoing construction.
+
+19- Unlike traditional tools that only look at one isolated number (like CPU > 80%), a SUSE Observability monitor is topology-aware. 
+This means it understands how components connect to each other.It runs globally: 
+You don't have to set up a new alert for every single server or container. 
+You create one monitor, and it automatically watches all relevant components—even new ones that get created later.
+It calculates health states: A monitor runs a background script to analyze your metrics, logs, and events.
+It then assigns a clear status to your components, such as CLEAR (healthy), DEVIATING (warning), or CRITICAL (danger).
+It provides a built-in remediation guide that tells your team exactly how to troubleshoot that specific issue.
