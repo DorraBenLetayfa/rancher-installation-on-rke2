@@ -3,7 +3,7 @@
 # For historical reasons, localhost precedes localhost.localdomain:
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-192.168.122.86 bastion.example.com observability.example.com
+192.168.122.86 bastion.example.com observability.example.com registry.example.com
 
 192.168.122.132 rke2-1-dbl.example.com rke2-1-dbl
 192.168.122.148 rke2-dbl-pr.example.com rke2-dbl-pr
