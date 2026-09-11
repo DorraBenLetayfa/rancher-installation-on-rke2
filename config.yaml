@@ -8,3 +8,5 @@ ingress-controller: traefik # nginx controller in deprecated
 #iprivate-registry: "/etc/rancher/rke2/registries.yaml"
 disable-default-registry-endpoint: true
 system-default-registry: "registry.example.com/new"
+
+I'm using a public registry so I don't need the registries.yaml file. otherwise use that file. 
