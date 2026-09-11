@@ -1,0 +1,10 @@
+token: WelcomeTOrke2
+cni: calico
+tls-san:
+  - 192.168.122.253
+disable:
+  - rke2-ingress-nginx
+ingress-controller: traefik # nginx controller in deprecated
+#iprivate-registry: "/etc/rancher/rke2/registries.yaml"
+disable-default-registry-endpoint: true
+system-default-registry: "registry.example.com/new"
