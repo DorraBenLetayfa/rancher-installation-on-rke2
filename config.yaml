@@ -5,8 +5,10 @@ tls-san:
 disable:
   - rke2-ingress-nginx
 ingress-controller: traefik # nginx controller in deprecated
-#iprivate-registry: "/etc/rancher/rke2/registries.yaml"
 disable-default-registry-endpoint: true
 system-default-registry: "registry.example.com/new"
 
-I'm using a public registry (????? not sure do I mean public repo) so I don't need the registries.yaml file. otherwise use that file. 
+NOTE: IMPORTANT: it's better to do mirroring in different repositories in harbor and use the mirroring method instead of the private registry method that I did. 
+Because with what I did I put everything in one project which lacks segregation. 
+so it's better to use this system-default-registry: registry.rancher.com and use harbor as private registry and if an image 
+is not available harbor can mirror it. 
