@@ -9,4 +9,4 @@ ingress-controller: traefik # nginx controller in deprecated
 disable-default-registry-endpoint: true
 system-default-registry: "registry.example.com/new"
 
-I'm using a public registry so I don't need the registries.yaml file. otherwise use that file. 
+I'm using a public registry (????? not sure do I mean public repo) so I don't need the registries.yaml file. otherwise use that file. 
